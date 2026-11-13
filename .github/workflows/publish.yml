@@ -17,12 +17,23 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          if [ -n "$NODE_AUTH_TOKEN" ]; then
-            npm publish --access public || echo "npm publish skipped (version may already exist)"
-            cp server.with-npm.json server.json
-          else
+          if [ -z "$NODE_AUTH_TOKEN" ]; then
             echo "No NPM_TOKEN secret: listing the remote MCP server only."
+            exit 0
           fi
+          NAME=$(node -p "require('./package.json').name")
+          VERSION=$(node -p "require('./package.json').version")
+          if npm view "$NAME@$VERSION" version >/dev/null 2>&1; then
+            echo "$NAME@$VERSION is already on npm."
+          else
+            npm publish --access public
+          fi
+          echo "Waiting for npm to show $NAME@$VERSION..."
+          for i in $(seq 1 30); do
+            if npm view "$NAME@$VERSION" version >/dev/null 2>&1; then echo "Visible on npm."; break; fi
+            sleep 10
+          done
+          cp server.with-npm.json server.json
       - name: Install mcp-publisher
         run: |
           curl -sL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
