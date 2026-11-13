@@ -23,6 +23,8 @@ Paid tools cost a few cents per call, paid in USDC through [x402](https://x402.o
 
 You're never charged when a request is invalid or the service needs more information.
 
+**Brief answers by default.** `check_public_domain` returns a short answer: the status, the date, the confidence, a one-line reason, and the record IDs. That's about 80% fewer tokens for your agent to read. Pass `format: "full"` (local wrapper) or `detail: "full"` (remote MCP) to get the complete reasoning and records.
+
 ## Use it
 
 ### Claude Desktop, Cursor, Windsurf, and other MCP clients

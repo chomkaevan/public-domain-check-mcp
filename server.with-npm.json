@@ -3,21 +3,38 @@
   "name": "io.github.chomkaevan/public-domain-check",
   "title": "Public Domain Check",
   "description": "US public-domain and copyright status for books, films, music and art. Pay per call via x402.",
-  "repository": { "url": "https://github.com/chomkaevan/public-domain-check-mcp", "source": "github" },
+  "repository": {
+    "url": "https://github.com/chomkaevan/public-domain-check-mcp",
+    "source": "github"
+  },
   "websiteUrl": "https://public-domain-check-production.up.railway.app",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "remotes": [
-    { "type": "streamable-http", "url": "https://public-domain-check-production.up.railway.app/mcp" }
+    {
+      "type": "streamable-http",
+      "url": "https://public-domain-check-production.up.railway.app/mcp"
+    }
   ],
   "packages": [
     {
       "registryType": "npm",
       "identifier": "public-domain-check-mcp",
-      "version": "0.3.0",
-      "transport": { "type": "stdio" },
+      "version": "0.4.0",
+      "transport": {
+        "type": "stdio"
+      },
       "environmentVariables": [
-        { "name": "WALLET_PRIVATE_KEY", "description": "Private key of a wallet holding a little USDC on Base; pays a few cents per paid call. Free tools work without it.", "isRequired": false, "isSecret": true },
-        { "name": "MAX_PRICE_PER_CALL", "description": "Hard cap in USD per call (default 0.25)", "isRequired": false }
+        {
+          "name": "WALLET_PRIVATE_KEY",
+          "description": "Private key of a wallet holding a little USDC on Base; pays a few cents per paid call. Free tools work without it.",
+          "isRequired": false,
+          "isSecret": true
+        },
+        {
+          "name": "MAX_PRICE_PER_CALL",
+          "description": "Hard cap in USD per call (default 0.25)",
+          "isRequired": false
+        }
       ]
     }
   ]

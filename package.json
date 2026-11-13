@@ -1,6 +1,6 @@
 {
   "name": "public-domain-check-mcp",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "MCP server: is this book, film, song or artwork in the US public domain? Backed by 2.38M US Copyright Office registrations and 434k renewals. Pays per call with x402 (USDC on Base).",
   "type": "module",
   "bin": {

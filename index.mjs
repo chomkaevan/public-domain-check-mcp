@@ -58,16 +58,17 @@ const work = {
   author_death_year: z.number().int().optional(),
   work_for_hire: z.boolean().optional(),
   origin: z.enum(["us", "foreign", "unknown"]).optional(),
+  format: z.enum(["brief", "full"]).optional().describe("brief (default): status, date, confidence, one-line reason. full: complete reasoning and records."),
 };
 
-const server = new McpServer({ name: "public-domain-check", version: "0.3.0" });
+const server = new McpServer({ name: "public-domain-check", version: "0.4.0" });
 const ro = { readOnlyHint: true, openWorldHint: true };
 
 server.registerTool("check_public_domain", {
   title: "Check US public-domain status",
   description: "Is a book, film, song, recording or artwork in the US public domain? Returns status, the date it enters the public domain, reasoning and the matching US Copyright Office registration/renewal. For 1923–1977 books a title alone is usually enough. Costs $0.02 (paid automatically in USDC). Not charged if more information is needed.",
   inputSchema: work, annotations: ro,
-}, async (a) => call(`/v1/pd-status?${qs(a)}`, undefined, true));
+}, async (a) => call(`/v1/pd-status?${qs({ format: "brief", ...a })}`, undefined, true));
 
 server.registerTool("check_public_domain_batch", {
   title: "Check many works at once",
