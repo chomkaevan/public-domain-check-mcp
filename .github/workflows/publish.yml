@@ -1,0 +1,32 @@
+# One-click publishing: Actions tab -> "Publish MCP server" -> Run workflow.
+name: Publish MCP server
+on: workflow_dispatch
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
+      - name: Publish npm package (only if NPM_TOKEN is set)
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -n "$NODE_AUTH_TOKEN" ]; then
+            npm publish --access public || echo "npm publish skipped (version may already exist)"
+            cp server.with-npm.json server.json
+          else
+            echo "No NPM_TOKEN secret: listing the remote MCP server only."
+          fi
+      - name: Install mcp-publisher
+        run: |
+          curl -sL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
+      - name: Publish to MCP Registry
+        run: |
+          ./mcp-publisher login github-oidc
+          ./mcp-publisher publish
