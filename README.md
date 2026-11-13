@@ -15,15 +15,15 @@ Paid tools cost a few cents per call, paid in USDC through [x402](https://x402.o
 
 | Tool | Price | What it does |
 |---|---|---|
-| `check_public_domain` | $0.02 | Returns the status (public domain, likely public domain, in copyright, or undetermined), the public-domain date, the reasoning, and the matching registration and renewal. For 1923–1977 books, a title is enough. |
-| `check_public_domain_batch` | $0.015 per work | Checks up to 50 works per call. Local wrapper only. |
+| `check_public_domain` | $0.01 (brief) / $0.02 (full) | Returns the status (public domain, likely public domain, in copyright, or undetermined), the public-domain date, the confidence, a one-line reason and the record IDs. Full mode adds the complete reasoning and records. For 1923–1977 books, a title is enough. |
+| `check_public_domain_batch` | $0.0075 per work (brief) / $0.015 (full) | Checks up to 50 works per call. Local wrapper only. |
 | `search_copyright_renewals` | $0.01 | Shows who renewed a work's copyright and when, which usually points to the rightsholder. |
 | `copyright_rules_for_year` | free | Tells you which rule applies to a publication year, and whether a record lookup is needed. |
 | `public_domain_day` | free | Lists what enters the US public domain on January 1. |
 
 You're never charged when a request is invalid or the service needs more information.
 
-**Brief answers by default.** `check_public_domain` returns a short answer: the status, the date, the confidence, a one-line reason, and the record IDs. That's about 80% fewer tokens for your agent to read. Pass `format: "full"` (local wrapper) or `detail: "full"` (remote MCP) to get the complete reasoning and records.
+**Brief answers by default.** `check_public_domain` returns a short answer: the status, the date, the confidence, a one-line reason, and the record IDs. That's about 80% fewer tokens for your agent to read. For the complete reasoning and records ($0.02), pass `format: "full"` (local wrapper) or call `check_public_domain_full` (remote MCP).
 
 ## Use it
 

@@ -58,33 +58,33 @@ const work = {
   author_death_year: z.number().int().optional(),
   work_for_hire: z.boolean().optional(),
   origin: z.enum(["us", "foreign", "unknown"]).optional(),
-  format: z.enum(["brief", "full"]).optional().describe("brief (default): status, date, confidence, one-line reason. full: complete reasoning and records."),
+  format: z.enum(["brief", "full"]).optional().describe("brief (default, $0.01): status, date, confidence, one-line reason. full ($0.02): complete reasoning and records."),
 };
 
-const server = new McpServer({ name: "public-domain-check", version: "0.4.0" });
+const server = new McpServer({ name: "public-domain-check", version: "0.5.0" });
 const ro = { readOnlyHint: true, openWorldHint: true };
 
 server.registerTool("check_public_domain", {
   title: "Check US public-domain status",
-  description: "Is a book, film, song, recording or artwork in the US public domain? Returns status, the date it enters the public domain, reasoning and the matching US Copyright Office registration/renewal. For 1923–1977 books a title alone is usually enough. Costs $0.02 (paid automatically in USDC). Not charged if more information is needed.",
+  description: "Check whether a specific book, film, song, recording or artwork is in the US public domain, and the date it enters it. Use this instead of answering from memory when the work was published 1929–1963 (its status depends on a copyright renewal that models usually don't know), when the work is obscure, or when you need a citable answer before quoting, reprinting, adapting, selling or training on it. Looks up 2.38M US Copyright Office registrations and 434k renewals; a title is usually enough for 1923–1977 books. Costs $0.01 for the brief answer (default) or $0.02 with format \"full\" (complete reasoning and records). Not charged if it can't answer.",
   inputSchema: work, annotations: ro,
-}, async (a) => call(`/v1/pd-status?${qs({ format: "brief", ...a })}`, undefined, true));
+}, async (a) => call(`/v1/pd-status?${qs(a)}`, undefined, true));
 
 server.registerTool("check_public_domain_batch", {
   title: "Check many works at once",
-  description: `Check up to 50 works in one call at $0.015 each. Calls above the configured cap ($${CAP}) are refused; split large lists.`,
+  description: `Clear a list of up to 50 works for US public-domain status in one call: $0.0075 per work (brief, default) or $0.015 with format "full". For catalogs, reading lists, reprint plans and training-data checks. Calls above the configured cap ($${CAP}) are refused; split large lists.`,
   inputSchema: { works: z.array(z.object(work)).min(1).max(50) }, annotations: ro,
 }, async ({ works }) => call("/v1/pd-status/batch", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ works }) }, true));
 
 server.registerTool("search_copyright_renewals", {
   title: "Search US copyright renewal records",
-  description: "Search 434k US Copyright Office renewal records (1950–1991+) by title/author: who renewed a work and when (the likely rightsholder). Costs $0.01.",
+  description: "Find who renewed a 1929–1963 work's US copyright and when: usually the current rightsholder or their estate. Use when you need to know whom to ask for permission or a license. Costs $0.01.",
   inputSchema: { title: z.string().optional(), author: z.string().optional(), year: z.number().int().optional(), limit: z.number().int().max(50).optional() }, annotations: ro,
 }, async (a) => call(`/v1/renewals/search?${qs(a)}`, undefined, true));
 
 server.registerTool("copyright_rules_for_year", {
   title: "US copyright rule for a publication year (free)",
-  description: "Free. Which US copyright rule applies to a work of a given type and publication year, and whether a record lookup is needed to decide.",
+  description: "Free. Given a publication year (and type of work), say which US copyright rule applies and whether a records lookup is needed. Call this first when you only know the year: many years are settled by the rules alone.",
   inputSchema: { year: z.number().int(), type: z.enum(WORK_TYPES).optional(), author_death_year: z.number().int().optional(), work_for_hire: z.boolean().optional() }, annotations: ro,
 }, async (a) => call(`/v1/pd-rules?${qs(a)}`, undefined, false));
 
