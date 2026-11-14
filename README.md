@@ -15,14 +15,14 @@ Paid tools cost a few cents per call, paid in USDC through [x402](https://x402.o
 
 | Tool | Price | What it does |
 |---|---|---|
-| `check_public_domain` | $0.01 (brief) / $0.02 (full) | Returns the status (public domain, likely public domain, in copyright, or undetermined), the public-domain date, the confidence, a one-line reason and the record IDs. Full mode adds the complete reasoning and records. For 1923–1977 books, a title is enough. |
+| `check_public_domain` | $0.01 (brief) / $0.02 (full) | Returns the status (public domain, likely public domain, in copyright, or undetermined), the public-domain date, the confidence, a one-line reason and the record IDs. Full mode adds the complete reasoning and records. Includes HathiTrust's reviewer verdict when one exists; pass `countries` for the UK, EU, Canada, Australia, Japan, China or India. For 1923–1977 books, a title is enough. |
 | `check_public_domain_batch` | $0.0075 per work (brief) / $0.015 (full) | Checks up to 50 works per call. Local wrapper only. |
 | `search_copyright_renewals` | $0.01 | Shows who renewed a work's copyright and when, which usually points to the rightsholder. |
 | `copyright_rules_for_year` | free | Tells you which rule applies to a publication year, and whether a record lookup is needed. |
 | `public_domain_day` | free | Lists what enters the US public domain on January 1. |
-| `check_wallet_sanctions` | $0.005 | Checks whether a crypto wallet is on the US Treasury (OFAC) sanctions lists (Bitcoin, Ethereum/EVM, USDT, USDC, Tron and more). Use it before paying an unknown wallet. |
-| `screen_sanctions_name` | $0.01 / $0.02 | Screens a person, company, vessel or aircraft name against the OFAC SDN and Consolidated lists, including aliases and spelling variants. |
-| `check_property_risk` | $0.02 / $0.03 | Returns the FEMA flood zone, whether flood insurance is required, the seismic risk, and the county and census tract for a US address. |
+| `check_wallet_sanctions` | $0.002 | Checks whether a crypto wallet is on the US Treasury (OFAC) sanctions lists (Bitcoin, Ethereum/EVM, USDT, USDC, Tron and more). Use it before paying an unknown wallet. |
+| `screen_sanctions_name` | $0.003 / $0.005 | Screens a person, company, vessel or aircraft name against the OFAC SDN and Consolidated lists, including aliases and spelling variants. |
+| `check_property_risk` | $0.02 / $0.04 | One-call natural hazard report for a US address: overall risk and what drives it, FEMA flood zone and insurance requirement, seismic risk, ratings for 18 hazards from FEMA's National Risk Index, and federal disaster declarations in the county since 2000. |
 
 You're never charged when a request is invalid or the service needs more information.
 
@@ -80,7 +80,7 @@ These include `@x402/mcp`, Coinbase AgentKit, and other x402-aware frameworks. C
 ## Data and limits
 
 - **Sources:** US Copyright Office records from the *Catalog of Copyright Entries*, plus renewal records. Both were transcribed by the New York Public Library and released under CC0.
-- **Limits:** US law only. The answers are informational, not legal advice.
+- **Coverage:** US law in full, plus term rules for the UK, EU, Canada, Australia, Japan, China and India (pass `countries`). The answers are informational, not legal advice.
 
 ## License
 

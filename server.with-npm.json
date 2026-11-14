@@ -2,13 +2,13 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.chomkaevan/public-domain-check",
   "title": "Public Domain Check",
-  "description": "Is a book, film, song or artwork in the US public domain, and when? Pay per call via x402.",
+  "description": "Is a book, film or song public domain in the US, UK, EU, Canada or Japan? Pay per call via x402.",
   "repository": {
     "url": "https://github.com/chomkaevan/public-domain-check-mcp",
     "source": "github"
   },
   "websiteUrl": "https://public-domain-check-production.up.railway.app/copyright",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "remotes": [
     {
       "type": "streamable-http",
@@ -19,7 +19,7 @@
     {
       "registryType": "npm",
       "identifier": "public-domain-check-mcp",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "transport": {
         "type": "stdio"
       },

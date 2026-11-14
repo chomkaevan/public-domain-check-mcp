@@ -58,15 +58,16 @@ const work = {
   author_death_year: z.number().int().optional(),
   work_for_hire: z.boolean().optional(),
   origin: z.enum(["us", "foreign", "unknown"]).optional(),
+  countries: z.string().optional().describe("Also answer for other countries, same price: comma-separated uk, eu, canada, australia, japan, china, india, or all"),
   format: z.enum(["brief", "full"]).optional().describe("brief (default, $0.01): status, date, confidence, one-line reason. full ($0.02): complete reasoning and records."),
 };
 
-const server = new McpServer({ name: "public-domain-check", version: "0.6.0" });
+const server = new McpServer({ name: "public-domain-check", version: "0.7.0" });
 const ro = { readOnlyHint: true, openWorldHint: true };
 
 server.registerTool("check_public_domain", {
   title: "Check US public-domain status",
-  description: "Check whether a specific book, film, song, recording or artwork is in the US public domain, and the date it enters it. Use this instead of answering from memory when the work was published 1929–1963 (its status depends on a copyright renewal that models usually don't know), when the work is obscure, or when you need a citable answer before quoting, reprinting, adapting, selling or training on it. Looks up 2.38M US Copyright Office registrations and 434k renewals; a title is usually enough for 1923–1977 books. Costs $0.01 for the brief answer (default) or $0.02 with format \"full\" (complete reasoning and records). Not charged if it can't answer.",
+  description: "Check whether a specific book, film, song, recording or artwork is in the US public domain, and the date it enters it. Use this instead of answering from memory when the work was published 1929–1963 (its status depends on a copyright renewal that models usually don't know), when the work is obscure, or when you need a citable answer before quoting, reprinting, adapting, selling or training on it. Looks up 2.38M US Copyright Office registrations and 434k renewals; a title is usually enough for 1923–1977 books. Includes HathiTrust's human-reviewer verdict when it exists, and with countries=uk,eu,... the status in other countries. Costs $0.01 for the brief answer (default) or $0.02 with format \"full\" (complete reasoning and records). Not charged if it can't answer.",
   inputSchema: work, annotations: ro,
 }, async (a) => call(`/v1/pd-status?${qs(a)}`, undefined, true));
 
@@ -96,19 +97,19 @@ server.registerTool("public_domain_day", {
 
 server.registerTool("check_wallet_sanctions", {
   title: "Check a crypto wallet against OFAC sanctions",
-  description: "Check whether a crypto wallet address is on the US Treasury OFAC sanctions lists. Call this before paying an unknown counterparty, onboarding a wallet, or accepting funds. Covers Bitcoin, Ethereum/EVM, USDT, USDC, Tron, Litecoin, Monero, Solana and more. Costs $0.005.",
+  description: "Check whether a crypto wallet address is on the US Treasury OFAC sanctions lists. Call this before paying an unknown counterparty, onboarding a wallet, or accepting funds. Covers Bitcoin, Ethereum/EVM, USDT, USDC, Tron, Litecoin, Monero, Solana and more. Costs $0.002.",
   inputSchema: { address: z.string().describe("Wallet address (any chain)") }, annotations: ro,
 }, async (a) => call(`/v1/sanctions/wallet?${qs(a)}`, undefined, true));
 
 server.registerTool("screen_sanctions_name", {
   title: "Screen a name against OFAC sanctions lists",
-  description: "Screen a person, company, vessel or aircraft name against the US Treasury OFAC SDN and Consolidated sanctions lists, including aliases, word order and spelling variants. Use before onboarding a customer, paying a supplier or signing a counterparty. Costs $0.01 (brief) or $0.02 with format \"full\".",
+  description: "Screen a person, company, vessel or aircraft name against the US Treasury OFAC SDN and Consolidated sanctions lists, including aliases, word order and spelling variants. Use before onboarding a customer, paying a supplier or signing a counterparty. Costs $0.003 (brief) or $0.005 with format \"full\".",
   inputSchema: { name: z.string(), type: z.enum(["individual", "entity", "vessel", "aircraft"]).optional(), format: z.enum(["brief", "full"]).optional() }, annotations: ro,
 }, async (a) => call(`/v1/sanctions/screen?${qs(a)}`, undefined, true));
 
 server.registerTool("check_property_risk", {
   title: "FEMA flood zone and seismic risk for a US address",
-  description: "Get the FEMA flood zone (and whether flood insurance is required for a federally backed mortgage), seismic risk, county and census tract for a US address or coordinates. Use when evaluating, listing, insuring or financing a property. Costs $0.02 (brief) or $0.03 with format \"full\". Not charged if the address can't be found.",
+  description: "One-call natural hazard report for a US address or coordinates: overall risk with its drivers, FEMA flood zone and whether flood insurance is required, seismic design category, FEMA National Risk Index ratings for 18 hazards (hurricane, wildfire, tornado, earthquake, heat and more), federal disaster declarations in the county since 2000, county and census tract. Use when evaluating, listing, insuring or financing a property. Costs $0.02 (brief) or $0.04 with format \"full\". Not charged if the address can't be found.",
   inputSchema: { address: z.string().optional(), lat: z.number().optional(), lon: z.number().optional(), format: z.enum(["brief", "full"]).optional() }, annotations: ro,
 }, async (a) => call(`/v1/property/risk?${qs(a)}`, undefined, true));
 

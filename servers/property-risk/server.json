@@ -2,13 +2,13 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.chomkaevan/property-risk",
   "title": "Property Risk Check",
-  "description": "FEMA flood zone, flood insurance need and seismic risk for US addresses. Pay per call via x402.",
+  "description": "One-call US property hazard report: flood, seismic, 18 FEMA hazard ratings, disasters. x402.",
   "repository": {
     "url": "https://github.com/chomkaevan/public-domain-check-mcp",
     "source": "github"
   },
   "websiteUrl": "https://public-domain-check-production.up.railway.app/property",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "remotes": [
     {
       "type": "streamable-http",

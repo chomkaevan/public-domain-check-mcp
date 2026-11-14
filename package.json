@@ -1,6 +1,6 @@
 {
   "name": "public-domain-check-mcp",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "MCP tools for AI agents: US public-domain/copyright status, OFAC sanctions screening (wallets and names), and FEMA flood + seismic risk for US addresses. Pays per call with x402 (USDC on Base).",
   "type": "module",
   "bin": {
