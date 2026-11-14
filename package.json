@@ -1,7 +1,7 @@
 {
   "name": "public-domain-check-mcp",
-  "version": "0.5.0",
-  "description": "MCP server: is this book, film, song or artwork in the US public domain? Backed by 2.38M US Copyright Office registrations and 434k renewals. Pays per call with x402 (USDC on Base).",
+  "version": "0.6.0",
+  "description": "MCP tools for AI agents: US public-domain/copyright status, OFAC sanctions screening (wallets and names), and FEMA flood + seismic risk for US addresses. Pays per call with x402 (USDC on Base).",
   "type": "module",
   "bin": {
     "public-domain-check-mcp": "index.mjs"
@@ -13,14 +13,22 @@
   ],
   "mcpName": "io.github.chomkaevan/public-domain-check",
   "keywords": [
+    "ai-agents",
+    "aml",
+    "books",
+    "copyright",
+    "fema",
+    "flood-zone",
+    "kyc",
     "mcp",
     "model-context-protocol",
-    "copyright",
+    "ofac",
     "public-domain",
-    "x402",
+    "real-estate",
     "rights",
-    "books",
-    "ai-agents"
+    "sanctions",
+    "wallet-screening",
+    "x402"
   ],
   "license": "MIT",
   "engines": {

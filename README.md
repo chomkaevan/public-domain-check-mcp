@@ -20,6 +20,9 @@ Paid tools cost a few cents per call, paid in USDC through [x402](https://x402.o
 | `search_copyright_renewals` | $0.01 | Shows who renewed a work's copyright and when, which usually points to the rightsholder. |
 | `copyright_rules_for_year` | free | Tells you which rule applies to a publication year, and whether a record lookup is needed. |
 | `public_domain_day` | free | Lists what enters the US public domain on January 1. |
+| `check_wallet_sanctions` | $0.005 | Checks whether a crypto wallet is on the US Treasury (OFAC) sanctions lists (Bitcoin, Ethereum/EVM, USDT, USDC, Tron and more). Use it before paying an unknown wallet. |
+| `screen_sanctions_name` | $0.01 / $0.02 | Screens a person, company, vessel or aircraft name against the OFAC SDN and Consolidated lists, including aliases and spelling variants. |
+| `check_property_risk` | $0.02 / $0.03 | Returns the FEMA flood zone, whether flood insurance is required, the seismic risk, and the county and census tract for a US address. |
 
 You're never charged when a request is invalid or the service needs more information.
 

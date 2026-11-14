@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.chomkaevan/sanctions-check",
+  "title": "Sanctions Check",
+  "description": "Screen crypto wallets and names against US Treasury OFAC sanctions lists. Pay per call via x402.",
+  "repository": {
+    "url": "https://github.com/chomkaevan/public-domain-check-mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://public-domain-check-production.up.railway.app/sanctions",
+  "version": "1.0.0",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://public-domain-check-production.up.railway.app/sanctions/mcp"
+    }
+  ]
+}

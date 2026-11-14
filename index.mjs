@@ -61,7 +61,7 @@ const work = {
   format: z.enum(["brief", "full"]).optional().describe("brief (default, $0.01): status, date, confidence, one-line reason. full ($0.02): complete reasoning and records."),
 };
 
-const server = new McpServer({ name: "public-domain-check", version: "0.5.0" });
+const server = new McpServer({ name: "public-domain-check", version: "0.6.0" });
 const ro = { readOnlyHint: true, openWorldHint: true };
 
 server.registerTool("check_public_domain", {
@@ -93,5 +93,23 @@ server.registerTool("public_domain_day", {
   description: "Free. What enters the US public domain on January 1 of a given year.",
   inputSchema: { year: z.number().int().optional() }, annotations: ro,
 }, async (a) => call(`/v1/public-domain-day?${qs(a)}`, undefined, false));
+
+server.registerTool("check_wallet_sanctions", {
+  title: "Check a crypto wallet against OFAC sanctions",
+  description: "Check whether a crypto wallet address is on the US Treasury OFAC sanctions lists. Call this before paying an unknown counterparty, onboarding a wallet, or accepting funds. Covers Bitcoin, Ethereum/EVM, USDT, USDC, Tron, Litecoin, Monero, Solana and more. Costs $0.005.",
+  inputSchema: { address: z.string().describe("Wallet address (any chain)") }, annotations: ro,
+}, async (a) => call(`/v1/sanctions/wallet?${qs(a)}`, undefined, true));
+
+server.registerTool("screen_sanctions_name", {
+  title: "Screen a name against OFAC sanctions lists",
+  description: "Screen a person, company, vessel or aircraft name against the US Treasury OFAC SDN and Consolidated sanctions lists, including aliases, word order and spelling variants. Use before onboarding a customer, paying a supplier or signing a counterparty. Costs $0.01 (brief) or $0.02 with format \"full\".",
+  inputSchema: { name: z.string(), type: z.enum(["individual", "entity", "vessel", "aircraft"]).optional(), format: z.enum(["brief", "full"]).optional() }, annotations: ro,
+}, async (a) => call(`/v1/sanctions/screen?${qs(a)}`, undefined, true));
+
+server.registerTool("check_property_risk", {
+  title: "FEMA flood zone and seismic risk for a US address",
+  description: "Get the FEMA flood zone (and whether flood insurance is required for a federally backed mortgage), seismic risk, county and census tract for a US address or coordinates. Use when evaluating, listing, insuring or financing a property. Costs $0.02 (brief) or $0.03 with format \"full\". Not charged if the address can't be found.",
+  inputSchema: { address: z.string().optional(), lat: z.number().optional(), lon: z.number().optional(), format: z.enum(["brief", "full"]).optional() }, annotations: ro,
+}, async (a) => call(`/v1/property/risk?${qs(a)}`, undefined, true));
 
 await server.connect(new StdioServerTransport());
