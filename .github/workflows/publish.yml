@@ -1,4 +1,6 @@
 # One-click publishing: Actions tab -> "Publish MCP server" -> Run workflow.
+# Publishes three separate MCP Registry listings (Public Domain Check, Sanctions Check, Property Risk Check)
+# and, if the repo has an NPM_TOKEN secret, the npm desktop add-on first.
 name: Publish MCP server
 on: workflow_dispatch
 permissions:
@@ -18,7 +20,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           if [ -z "$NODE_AUTH_TOKEN" ]; then
-            echo "No NPM_TOKEN secret: listing the remote MCP server only."
+            echo "No NPM_TOKEN secret: listing the remote MCP servers only."
             exit 0
           fi
           NAME=$(node -p "require('./package.json').name")
@@ -37,7 +39,12 @@ jobs:
       - name: Install mcp-publisher
         run: |
           curl -sL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
-      - name: Publish to MCP Registry
+      - name: Publish to MCP Registry (one listing per product)
         run: |
           ./mcp-publisher login github-oidc
+          echo "== Public Domain Check"
           ./mcp-publisher publish
+          for d in servers/*/; do
+            echo "== $d"
+            (cd "$d" && "$GITHUB_WORKSPACE/mcp-publisher" publish)
+          done
